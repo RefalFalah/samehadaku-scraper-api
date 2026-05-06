@@ -5,12 +5,11 @@ import re
 
 from scrapling.fetchers import Fetcher
 
-logger = logging.getLogger(__name__)
-
 _ANILIST_URL = "https://graphql.anilist.co"
 _CACHE: dict[str, dict] = {}
 
 _TITLE_CLEANUP = re.compile(r"\s*(?:sub\s*indo|subtitle\s*indonesia|batch)$", re.IGNORECASE)
+_STRIP_HTML = re.compile(r"<[^>]+>")
 
 
 def _clean_title(title: str) -> str:
@@ -63,9 +62,10 @@ async def fetch_anilist(title: str) -> dict | None:
     if not result:
         return None
     cover = result.get("coverImage", {})
-    description = result.get("description", "")
+    description = result.get("description", "") or ""
+    description = _STRIP_HTML.sub("", description).strip()
     return {
         "banner": result.get("bannerImage"),
         "posterHD": cover.get("extraLarge") or cover.get("large"),
-        "synopsisHD": description.strip() if description else None,
+        "synopsisHD": description if description else None,
     }
