@@ -8,6 +8,7 @@ from app.utils.parser import (
     parse_spe_field,
     parse_spe_links,
 )
+from app.utils.poster import fetch_poster
 from app.models.schemas import (
     AnimeDetail,
     AnimeRef,
@@ -147,12 +148,15 @@ async def get_anime_info(slug: str) -> AnimeDetail | None:
     episode_lists = _parse_episode_list(page)
     batch_links = _parse_batch_links(page)
 
+    poster_hd = await fetch_poster(title)
+
     return AnimeDetail(
         title=title,
         japaneseName=japanese_name or None,
         englishName=english_name or None,
         synonyms=synonyms or None,
         poster=poster,
+        posterHD=poster_hd,
         score=score or None,
         ratingCount=rating_count or None,
         type=anime_type or None,

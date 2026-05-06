@@ -8,6 +8,7 @@ from app.utils.parser import (
     parse_spe_field,
     parse_download_groups,
 )
+from app.utils.poster import fetch_poster
 from app.models.schemas import (
     MovieListItem,
     MovieDetail,
@@ -162,12 +163,15 @@ async def get_movie_info(slug: str) -> MovieDetail | None:
         if ul_list:
             download_urls.extend(parse_download_groups(dl_div, "ul li"))
 
+    poster_hd = await fetch_poster(title)
+
     return MovieDetail(
         title=title,
         japaneseName=japanese_name or None,
         englishName=english_name or None,
         synonyms=synonyms or None,
         poster=poster,
+        posterHD=poster_hd,
         score=score or None,
         ratingCount=rating_count or None,
         status=status or None,
