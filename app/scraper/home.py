@@ -103,7 +103,7 @@ async def get_top_anime():
         if detail:
             anime.episodeCount = detail.get("episodeCount")
             anime.status = detail.get("status")
-            anime.synopsis = detail.get("synopsisHD") or detail.get("synopsis")
+            anime.synopsis = detail.get("synopsis") or detail.get("synopsisHD")
             anime.banner = detail.get("banner")
     return top
 
