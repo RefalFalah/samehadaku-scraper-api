@@ -35,7 +35,8 @@ async def get_anime_by_genre(genre_slug: str, page_num: int = 1):
     result = []
 
     for article in page.css("article.animpost"):
-        anime = article.css_first("div.animepost")
+        anime_list = article.css("div.animepost")
+        anime = anime_list[0] if anime_list else None
         if not anime:
             continue
 

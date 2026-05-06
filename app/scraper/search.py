@@ -12,7 +12,8 @@ async def search_anime(keyword: str) -> list[SearchAnime]:
     result = []
 
     for article in page.css("article.animpost"):
-        anime = article.css_first("div.animepost")
+        anime_list = article.css("div.animepost")
+        anime = anime_list[0] if anime_list else None
         if not anime:
             continue
 

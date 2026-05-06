@@ -17,13 +17,11 @@ async def get_episode_by_slug(slug: str) -> EpisodeDetail | None:
         page, ".mfp-hide iframe", "src"
     )
 
-    mp4 = parse_download_groups(page, ".download ul:first li")
-    mkv = parse_download_groups(page, ".download ul:last li")
     download_urls = []
-    if mp4:
-        download_urls.extend(mp4)
-    if mkv and mkv != mp4:
-        download_urls.extend(mkv)
+    for dl_div in page.css(".download-eps"):
+        ul_list = dl_div.css("ul")
+        if ul_list:
+            download_urls.extend(parse_download_groups(dl_div, "ul li"))
 
     prev_slug = ""
     next_slug = ""

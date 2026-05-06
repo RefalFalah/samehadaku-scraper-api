@@ -156,10 +156,11 @@ async def get_movie_info(slug: str) -> MovieDetail | None:
 
     episode_lists = _parse_episode_list(page)
 
-    download_urls = parse_download_groups(page, ".download ul:first li")
-    mkv = parse_download_groups(page, ".download ul:last li")
-    if mkv and mkv != download_urls:
-        download_urls = download_urls + mkv
+    download_urls = []
+    for dl_div in page.css(".download-eps"):
+        ul_list = dl_div.css("ul")
+        if ul_list:
+            download_urls.extend(parse_download_groups(dl_div, "ul li"))
 
     return MovieDetail(
         title=title,
