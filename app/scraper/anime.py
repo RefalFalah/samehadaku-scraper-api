@@ -150,7 +150,8 @@ async def get_anime_info(slug: str) -> AnimeDetail | None:
 
     anilist = await fetch_anilist(title)
     poster_hd = anilist.get("posterHD") if anilist else None
-    synopsis_hd = anilist.get("synopsisHD") if anilist else None
+    if anilist and anilist.get("synopsisHD"):
+        synopsis = anilist["synopsisHD"]
 
     return AnimeDetail(
         title=title,
@@ -172,7 +173,6 @@ async def get_anime_info(slug: str) -> AnimeDetail | None:
         released=released or None,
         genres=genres,
         synopsis=synopsis,
-        synopsisHD=synopsis_hd,
         episodeLists=episode_lists,
         batchLinks=batch_links,
     )

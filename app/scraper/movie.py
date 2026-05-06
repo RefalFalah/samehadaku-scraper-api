@@ -165,7 +165,8 @@ async def get_movie_info(slug: str) -> MovieDetail | None:
 
     anilist = await fetch_anilist(title)
     poster_hd = anilist.get("posterHD") if anilist else None
-    synopsis_hd = anilist.get("synopsisHD") if anilist else None
+    if anilist and anilist.get("synopsisHD"):
+        synopsis = anilist["synopsisHD"]
 
     return MovieDetail(
         title=title,
@@ -184,7 +185,6 @@ async def get_movie_info(slug: str) -> MovieDetail | None:
         producers=producers,
         genres=genres,
         synopsis=synopsis,
-        synopsisHD=synopsis_hd,
         episodeLists=episode_lists,
         downloadUrls=download_urls,
     )

@@ -89,9 +89,8 @@ async def get_home():
         if detail:
             anime.episodeCount = detail.get("episodeCount")
             anime.status = detail.get("status")
-            anime.synopsis = detail.get("synopsis")
+            anime.synopsis = detail.get("synopsisHD") or detail.get("synopsis")
             anime.posterHD = detail.get("posterHD")
-            anime.synopsisHD = detail.get("synopsisHD")
     return {"recentAnime": recent, "topAnime": top}
 
 
@@ -104,9 +103,8 @@ async def get_top_anime():
         if detail:
             anime.episodeCount = detail.get("episodeCount")
             anime.status = detail.get("status")
-            anime.synopsis = detail.get("synopsis")
+            anime.synopsis = detail.get("synopsisHD") or detail.get("synopsis")
             anime.posterHD = detail.get("posterHD")
-            anime.synopsisHD = detail.get("synopsisHD")
     return top
 
 

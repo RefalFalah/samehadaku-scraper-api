@@ -26,7 +26,6 @@ class TopAnime(BaseModel):
     episodeCount: str | None = None
     status: str | None = None
     synopsis: str | None = None
-    synopsisHD: str | None = None
     url: str
 
 
@@ -76,7 +75,6 @@ class AnimeDetail(BaseModel):
     released: str | None = None
     genres: list[Genre] = []
     synopsis: str
-    synopsisHD: str | None = None
     episodeLists: list[EpisodeItem]
     batchLinks: list[BatchLink] = []
 
@@ -187,7 +185,6 @@ class MovieDetail(BaseModel):
     producers: list[Genre] = []
     genres: list[Genre] = []
     synopsis: str
-    synopsisHD: str | None = None
     episodeLists: list[EpisodeItem]
     downloadUrls: list[DownloadGroup] = []
 
