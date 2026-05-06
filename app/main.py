@@ -25,7 +25,7 @@ async def root():
         "status": "Ok",
         "message": "Samehadaku Unofficial API",
         "version": "2.0.0",
-        "endpoints": {
+"endpoints": {
             "home": f"{settings.api_prefix}/home",
             "top_anime": f"{settings.api_prefix}/top",
             "recent_anime": f"{settings.api_prefix}/recent/{{page?}}",
