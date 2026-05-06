@@ -22,6 +22,9 @@ class TopAnime(BaseModel):
     slug: str
     poster: str
     score: str | None = None
+    episodeCount: str | None = None
+    status: str | None = None
+    synopsis: str | None = None
     url: str
 
 

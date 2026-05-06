@@ -1,6 +1,8 @@
+import asyncio
+
 from app.scraper.client import fetch_page
 from app.config import build_url, extract_slug
-from app.utils.parser import get_attr, normalize_date
+from app.utils.parser import get_text, get_attr, normalize_date, parse_spe_field
 from app.models.schemas import RecentAnime, TopAnime
 
 
@@ -85,4 +87,29 @@ async def get_home():
 
 async def get_top_anime():
     page = await fetch_page(build_url("/"))
-    return _parse_top_10(page)
+    top = _parse_top_10(page)
+    slugs = [a.slug for a in top]
+    details = await asyncio.gather(*[_fetch_top_detail(s) for s in slugs])
+    for anime, detail in zip(top, details):
+        if detail:
+            anime.episodeCount = detail.get("episodeCount")
+            anime.status = detail.get("status")
+            anime.synopsis = detail.get("synopsis")
+    return top
+
+
+async def _fetch_top_detail(slug: str) -> dict | None:
+    try:
+        page = await fetch_page(build_url(f"/anime/{slug}/"))
+        if not page.css("header.info_episode h1.entry-title"):
+            return None
+        episode_count = parse_spe_field(page, "Total Episode")
+        status = parse_spe_field(page, "Status")
+        synopsis = get_text(page, ".infoanime .infox .desc .entry-content-single p")
+        return {
+            "episodeCount": episode_count or None,
+            "status": status or None,
+            "synopsis": synopsis or None,
+        }
+    except Exception:
+        return None
