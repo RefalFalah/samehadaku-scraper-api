@@ -150,7 +150,7 @@ async def get_anime_info(slug: str) -> AnimeDetail | None:
 
     anilist = await fetch_anilist(title)
     banner = anilist.get("banner") if anilist else None
-    if anilist and anilist.get("synopsisHD") and not synopsis.strip():
+    if anilist and anilist.get("synopsisHD"):
         synopsis = anilist["synopsisHD"]
 
     return AnimeDetail(
