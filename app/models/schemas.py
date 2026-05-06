@@ -21,7 +21,7 @@ class TopAnime(BaseModel):
     title: str
     slug: str
     poster: str
-    posterHD: str | None = None
+    banner: str | None = None
     score: str | None = None
     episodeCount: str | None = None
     status: str | None = None
@@ -61,7 +61,7 @@ class AnimeDetail(BaseModel):
     englishName: str | None = None
     synonyms: str | None = None
     poster: str
-    posterHD: str | None = None
+    banner: str | None = None
     score: str | None = None
     ratingCount: str | None = None
     type: str | None = None
@@ -174,7 +174,7 @@ class MovieDetail(BaseModel):
     englishName: str | None = None
     synonyms: str | None = None
     poster: str
-    posterHD: str | None = None
+    banner: str | None = None
     score: str | None = None
     ratingCount: str | None = None
     status: str | None = None

@@ -90,7 +90,7 @@ async def get_home():
             anime.episodeCount = detail.get("episodeCount")
             anime.status = detail.get("status")
             anime.synopsis = detail.get("synopsisHD") or detail.get("synopsis")
-            anime.posterHD = detail.get("posterHD")
+            anime.banner = detail.get("banner")
     return {"recentAnime": recent, "topAnime": top}
 
 
@@ -104,7 +104,7 @@ async def get_top_anime():
             anime.episodeCount = detail.get("episodeCount")
             anime.status = detail.get("status")
             anime.synopsis = detail.get("synopsisHD") or detail.get("synopsis")
-            anime.posterHD = detail.get("posterHD")
+            anime.banner = detail.get("banner")
     return top
 
 
@@ -124,11 +124,12 @@ async def _fetch_top_detail(slug: str) -> dict | None:
         anilist = await fetch_anilist(title) if title else None
         poster_hd = anilist.get("posterHD") if anilist else None
         synopsis_hd = anilist.get("synopsisHD") if anilist else None
+        banner = anilist.get("banner") if anilist else None
         return {
             "episodeCount": episode_count,
             "status": status or None,
             "synopsis": synopsis or None,
-            "posterHD": poster_hd,
+            "banner": banner,
             "synopsisHD": synopsis_hd,
         }
     except Exception:

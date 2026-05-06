@@ -23,7 +23,7 @@ def _search_anilist(title: str) -> dict | None:
     if search_title in _CACHE:
         return _CACHE[search_title]
 
-    query = "query($search: String) { Media(search: $search, type: ANIME, isAdult: false) { id title { romaji english } description(asHtml: false) coverImage { large extraLarge } } }"
+    query = "query($search: String) { Media(search: $search, type: ANIME, isAdult: false) { id title { romaji english } description(asHtml: false) bannerImage coverImage { large extraLarge } } }"
     payload = json.dumps({"query": query, "variables": {"search": search_title}})
 
     try:
@@ -65,6 +65,7 @@ async def fetch_anilist(title: str) -> dict | None:
     cover = result.get("coverImage", {})
     description = result.get("description", "")
     return {
+        "banner": result.get("bannerImage"),
         "posterHD": cover.get("extraLarge") or cover.get("large"),
         "synopsisHD": description.strip() if description else None,
     }

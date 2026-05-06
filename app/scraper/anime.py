@@ -149,7 +149,7 @@ async def get_anime_info(slug: str) -> AnimeDetail | None:
     batch_links = _parse_batch_links(page)
 
     anilist = await fetch_anilist(title)
-    poster_hd = anilist.get("posterHD") if anilist else None
+    banner = anilist.get("banner") if anilist else None
     if anilist and anilist.get("synopsisHD"):
         synopsis = anilist["synopsisHD"]
 
@@ -159,7 +159,7 @@ async def get_anime_info(slug: str) -> AnimeDetail | None:
         englishName=english_name or None,
         synonyms=synonyms or None,
         poster=poster,
-        posterHD=poster_hd,
+        banner=banner,
         score=score or None,
         ratingCount=rating_count or None,
         type=anime_type or None,

@@ -164,7 +164,7 @@ async def get_movie_info(slug: str) -> MovieDetail | None:
             download_urls.extend(parse_download_groups(dl_div, "ul li"))
 
     anilist = await fetch_anilist(title)
-    poster_hd = anilist.get("posterHD") if anilist else None
+    banner = anilist.get("banner") if anilist else None
     if anilist and anilist.get("synopsisHD"):
         synopsis = anilist["synopsisHD"]
 
@@ -174,7 +174,7 @@ async def get_movie_info(slug: str) -> MovieDetail | None:
         englishName=english_name or None,
         synonyms=synonyms or None,
         poster=poster,
-        posterHD=poster_hd,
+        banner=banner,
         score=score or None,
         ratingCount=rating_count or None,
         status=status or None,
