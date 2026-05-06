@@ -82,6 +82,13 @@ async def get_home():
     page = await fetch_page(build_url("/"))
     recent = _parse_recent_list(page)
     top = _parse_top_10(page)
+    slugs = [a.slug for a in top]
+    details = await asyncio.gather(*[_fetch_top_detail(s) for s in slugs])
+    for anime, detail in zip(top, details):
+        if detail:
+            anime.episodeCount = detail.get("episodeCount")
+            anime.status = detail.get("status")
+            anime.synopsis = detail.get("synopsis")
     return {"recentAnime": recent, "topAnime": top}
 
 
