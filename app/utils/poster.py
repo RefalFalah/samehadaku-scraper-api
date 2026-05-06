@@ -23,7 +23,7 @@ def _search_anilist(title: str) -> dict | None:
     if search_title in _CACHE:
         return _CACHE[search_title]
 
-    query = "query($search: String) { Media(search: $search, type: ANIME, isAdult: false) { id title { romaji english } coverImage { large extraLarge } } }"
+    query = "query($search: String) { Media(search: $search, type: ANIME, isAdult: false) { id title { romaji english } description(asHtml: false) coverImage { large extraLarge } } }"
     payload = json.dumps({"query": query, "variables": {"search": search_title}})
 
     try:
@@ -54,3 +54,17 @@ async def fetch_poster(title: str) -> str | None:
         return None
     cover = result.get("coverImage", {})
     return cover.get("extraLarge") or cover.get("large")
+
+
+async def fetch_anilist(title: str) -> dict | None:
+    if not title:
+        return None
+    result = await asyncio.to_thread(_search_anilist, title)
+    if not result:
+        return None
+    cover = result.get("coverImage", {})
+    description = result.get("description", "")
+    return {
+        "posterHD": cover.get("extraLarge") or cover.get("large"),
+        "synopsisHD": description.strip() if description else None,
+    }

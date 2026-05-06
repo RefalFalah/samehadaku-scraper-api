@@ -3,7 +3,7 @@ import asyncio
 from app.scraper.client import fetch_page
 from app.config import build_url, extract_slug
 from app.utils.parser import get_text, get_attr, normalize_date, parse_spe_field
-from app.utils.poster import fetch_poster
+from app.utils.poster import fetch_anilist
 from app.models.schemas import RecentAnime, TopAnime
 
 
@@ -91,6 +91,7 @@ async def get_home():
             anime.status = detail.get("status")
             anime.synopsis = detail.get("synopsis")
             anime.posterHD = detail.get("posterHD")
+            anime.synopsisHD = detail.get("synopsisHD")
     return {"recentAnime": recent, "topAnime": top}
 
 
@@ -105,6 +106,7 @@ async def get_top_anime():
             anime.status = detail.get("status")
             anime.synopsis = detail.get("synopsis")
             anime.posterHD = detail.get("posterHD")
+            anime.synopsisHD = detail.get("synopsisHD")
     return top
 
 
@@ -121,12 +123,15 @@ async def _fetch_top_detail(slug: str) -> dict | None:
             episode_count = str(len(page.css(".lstepsiode.listeps > ul > li")))
         status = parse_spe_field(page, "Status")
         synopsis = get_text(page, ".infoanime .infox .desc .entry-content-single p")
-        poster_hd = await fetch_poster(title) if title else None
+        anilist = await fetch_anilist(title) if title else None
+        poster_hd = anilist.get("posterHD") if anilist else None
+        synopsis_hd = anilist.get("synopsisHD") if anilist else None
         return {
             "episodeCount": episode_count,
             "status": status or None,
             "synopsis": synopsis or None,
             "posterHD": poster_hd,
+            "synopsisHD": synopsis_hd,
         }
     except Exception:
         return None

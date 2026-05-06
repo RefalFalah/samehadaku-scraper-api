@@ -8,7 +8,7 @@ from app.utils.parser import (
     parse_spe_field,
     parse_download_groups,
 )
-from app.utils.poster import fetch_poster
+from app.utils.poster import fetch_anilist
 from app.models.schemas import (
     MovieListItem,
     MovieDetail,
@@ -163,7 +163,9 @@ async def get_movie_info(slug: str) -> MovieDetail | None:
         if ul_list:
             download_urls.extend(parse_download_groups(dl_div, "ul li"))
 
-    poster_hd = await fetch_poster(title)
+    anilist = await fetch_anilist(title)
+    poster_hd = anilist.get("posterHD") if anilist else None
+    synopsis_hd = anilist.get("synopsisHD") if anilist else None
 
     return MovieDetail(
         title=title,
@@ -182,6 +184,7 @@ async def get_movie_info(slug: str) -> MovieDetail | None:
         producers=producers,
         genres=genres,
         synopsis=synopsis,
+        synopsisHD=synopsis_hd,
         episodeLists=episode_lists,
         downloadUrls=download_urls,
     )
