@@ -93,10 +93,16 @@ class DownloadGroup(BaseModel):
     urls: list[DownloadLink]
 
 
+class StreamMirror(BaseModel):
+    quality: str
+    url: str
+
+
 class EpisodeDetail(BaseModel):
     title: str
     anime: AnimeRef
     streamUrl: str | None = None
+    streamMirrors: list[StreamMirror] = []
     downloadUrls: list[DownloadGroup] = []
     hasNextEpisode: bool = False
     nextEpisode: AnimeRef | None = None
