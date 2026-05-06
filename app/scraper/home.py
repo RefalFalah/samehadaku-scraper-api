@@ -104,11 +104,11 @@ async def _fetch_top_detail(slug: str) -> dict | None:
         if not page.css("header.info_episode h1.entry-title"):
             return None
         episode_count = parse_spe_field(page, "Total Episode")
-        status = parse_spe_field(page, "Status")
-        synopsis = get_text(page, ".infoanime .infox .desc .entry-content-single p")
         episode_count = (episode_count or "").strip()
         if not episode_count.isdigit():
-            episode_count = None
+            episode_count = str(len(page.css(".lstepsiode.listeps > ul > li")))
+        status = parse_spe_field(page, "Status")
+        synopsis = get_text(page, ".infoanime .infox .desc .entry-content-single p")
         return {
             "episodeCount": episode_count,
             "status": status or None,
